@@ -24,3 +24,16 @@ char* lower(char* string) {
     }
     return string;
 }
+
+int isNumeric(char* string) {
+    for (size_t i = 0; i < strlen(string); i++) {
+        if (string[i] < ASCII_ZERO || string[i] > ASCII_NINE)
+            return 0;
+    }
+    return 1;
+}
+
+int isSpace(char ch) {
+    return ch == SPACE_ASCII ||
+        ch == NEWLINE_ASCII;
+}

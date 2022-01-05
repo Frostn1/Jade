@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #ifndef COMPILER_H
 #define COMPILER_H
 
@@ -6,6 +8,7 @@
 
 #include "Register.h"
 #include "Instruction.h"
+#include "Tool.h"
 
 #define STACK_SIZE 256
 #define MAX_CODE_SIZE 1024
@@ -17,8 +20,8 @@ typedef enum {
 
 typedef enum {
 	ERROR_OFF,
-	LEXICAL_ERROR,
-	VALUE_ERROR,
+	ERROR_LEXICAL,
+	ERROR_VALUE,
 }ERROR_OPTIONS;
 
 typedef struct Compiler_16B {
@@ -37,7 +40,11 @@ typedef struct Compiler_16B {
 
 }Compiler;
 
+// Full Compiler
 Compiler* newCompiler(DEBUG_OPTIONS debugFlag);
 void runCompiler(Compiler* comp);
 void freeCompiler(Compiler* comp);
+
+// Lexical
+void codeToInstructionArray(Compiler* comp, char* rawCode);
 #endif // !COMPILER_H

@@ -53,7 +53,14 @@ void runCompiler(Compiler* comp) {
 			comp->ip++;
 			break;
 		case JNE:
-			comp->ip = comp->zf ? comp->ip + 2 : comp->code[comp->ip + 1] * 2 - 2;
+			comp->ip = !comp->zf ? comp->ip + 2 : comp->code[comp->ip + 1];
+			break;
+		case JE:
+			comp->ip = !comp->zf ? comp->ip + 2 : comp->code[comp->ip + 1];
+			break;
+		case INC:
+			comp->Registers[comp->code[comp->ip + 1]]++;
+			comp->ip += 2;
 			break;
 		case STP:
 			return;
@@ -68,6 +75,7 @@ void freeCompiler(Compiler* comp) {
 }
 
 void dumpStack(Compiler* comp) {
+	putchar('\n');
 	for (size_t i = 0; i < comp->sp; i++) {
 		printf("0x%x ... %d\n", &comp->Stack[i], comp->Stack[i]);
 	}
@@ -75,7 +83,7 @@ void dumpStack(Compiler* comp) {
 }
 
 void dumpRegisters(Compiler* comp) {
-	printf("Reg Dump:\n");
+	printf("\nReg Dump:\n");
 	for (size_t i = 0; i < sizeof(comp->Registers) / sizeof(int); i++) {
 		printf("%s <-> %d\n", RegisterArray[i], comp->Registers[i]);
 	}

@@ -21,7 +21,7 @@ LabelList* newLabelList() {
 }
 
 void freeLabel(Label* label) {
-	free(label->name);
+	// free(label->name);
 	free(label);
 	return;
 }

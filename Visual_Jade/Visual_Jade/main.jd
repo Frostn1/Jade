@@ -1,4 +1,11 @@
-WORD:
-	push 10
-jmp WORD
+push 91
+push 65
+pop dx
+LOOP:
+	chr dx
+	inc dx
+	cmp dx
+	jne LOOP
+stack
+reg
 stp

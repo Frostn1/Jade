@@ -19,6 +19,8 @@ typedef enum {
 	REG,
 	CMP,
 	JNE,
+	JE,
+	INC,
 	NUM_OF_INSTRUCTION,
 }Instruction;
 

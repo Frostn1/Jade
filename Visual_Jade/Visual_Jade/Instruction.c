@@ -21,7 +21,7 @@ char* InstructionArray[NUM_OF_INSTRUCTION + NUM_OF_REGISTERS] = {
 };
 
 int isInstruction(char* word) {
-	for (size_t i = 0; i < NUM_OF_INSTRUCTION; i++) {
+	for (size_t i = 0; i < NUM_OF_INSTRUCTION + NUM_OF_REGISTERS; i++) {
 		if (!strcmp(InstructionArray[i], word))
 			return i;
 	}

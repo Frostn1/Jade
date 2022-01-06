@@ -5,6 +5,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "Register.h"
 #include "Instruction.h"
@@ -46,5 +47,6 @@ void runCompiler(Compiler* comp);
 void freeCompiler(Compiler* comp);
 
 // Lexical
+bool makeInstruction(Compiler* comp, int start, int end, char* raw);
 void codeToInstructionArray(Compiler* comp, char* rawCode);
 #endif // !COMPILER_H

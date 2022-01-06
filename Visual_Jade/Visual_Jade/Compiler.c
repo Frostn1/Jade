@@ -6,11 +6,36 @@ Compiler* newCompiler(DEBUG_OPTIONS debugFlag) {
 	comp->ip = 0;
 	comp->sp = 0;
 	comp->error = ERROR_OFF;
+	for (size_t i = 0; i < NUM_OF_REGISTERS; i++) {
+		comp->Registers[i] = 0;
+	}
 	return comp;
 }
 
 void runCompiler(Compiler* comp) {
-
+	comp->ip = 0;
+	while (true) {
+		switch (comp->code[comp->ip]) {
+		case PUSH:
+			comp->Stack[comp->sp++] = comp->code[++comp->ip];
+			comp->ip++;
+			break;
+		case POP:
+			comp->Registers[comp->code[comp->ip + 1]] = comp->Stack[--comp->sp];
+			comp->ip += 2;
+			break;
+		case DROP:
+			printf("%d", comp->code[comp->ip + 1]);
+			comp->ip += 2;
+			break;
+		case MOV:
+			comp->Registers[comp->code[comp->ip + 1]] = comp->code[comp->ip + 2];
+			comp->ip += 3;
+			break;
+		case STP:
+			return;
+		}
+	}
 }
 
 void freeCompiler(Compiler* comp) {
@@ -24,13 +49,15 @@ void freeCompiler(Compiler* comp) {
 // Might end with comp having the error flag up, need to check after leaving function
 bool makeInstruction(Compiler* comp, int start, int end, char* raw) {
 	char* word = NULL;
-	int ic = 0;
+	int ic = 0, rc = 0;
 	word = (char*)malloc(end - start + 1);
 	strncpy(word, &raw[start], end - start);
 	word[end - start] = '\0';
 	if (comp->debug) printf("DEBUG: %s\n", word);
 	ic = isInstruction(lower(word));
+	rc = isRegister(lower(word));
 	if (ic - INSTRUCTION_EMPTY) comp->code[comp->ip++] = ic;
+	else if(rc - REGISTER_EMPTY) comp->code[comp->ip++] = rc;
 	else if (isNumeric(word)) comp->code[comp->ip++] = atoi(word);
 	else {
 		comp->error = ERROR_LEXICAL;

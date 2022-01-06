@@ -1,2 +1,5 @@
 push 5
 pop ex
+drop ex
+drop 5
+stp

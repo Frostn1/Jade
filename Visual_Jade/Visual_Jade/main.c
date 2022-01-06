@@ -8,5 +8,8 @@ int main() {
 	codeToInstructionArray(comp, text);
 	if (comp->error)
 		fprintf(stderr, "ERROR: while matching terms\n");
+	else
+		runCompiler(comp);
+	freeCompiler(comp);
 	return 0;
 }

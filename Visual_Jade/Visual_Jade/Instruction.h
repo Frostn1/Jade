@@ -12,6 +12,7 @@ typedef enum {
 	POP,
 	DROP,
 	MOV,
+	STP,
 	NUM_OF_INSTRUCTION,
 }Instruction;
 

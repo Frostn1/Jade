@@ -21,6 +21,7 @@ typedef enum {
 	JNE,
 	JE,
 	INC,
+	DEC,
 	NUM_OF_INSTRUCTION,
 }Instruction;
 

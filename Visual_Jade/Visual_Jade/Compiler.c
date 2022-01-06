@@ -62,6 +62,10 @@ void runCompiler(Compiler* comp) {
 			comp->Registers[comp->code[comp->ip + 1]]++;
 			comp->ip += 2;
 			break;
+		case DEC:
+			comp->Registers[comp->code[comp->ip + 1]]--;
+			comp->ip += 2;
+			break;
 		case STP:
 			return;
 		}

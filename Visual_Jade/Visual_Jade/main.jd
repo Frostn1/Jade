@@ -1,11 +1,10 @@
-push 91
-push 65
+push 64
+push 90
 pop dx
 LOOP:
 	chr dx
-	inc dx
+	dec dx
 	cmp dx
 	jne LOOP
-stack
-reg
+
 stp

@@ -10,9 +10,13 @@
 typedef enum {
 	PUSH,
 	POP,
-	DROP,
+	PRT,
 	MOV,
 	STP,
+	CHR,
+	JMP,
+	STACK,
+	REG,
 	NUM_OF_INSTRUCTION,
 }Instruction;
 

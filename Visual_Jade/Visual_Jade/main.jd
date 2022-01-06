@@ -1,5 +1,6 @@
 push 5
-pop ex
-drop ex
-drop 5
+push 6
+push 12
+push 65
+stack
 stp

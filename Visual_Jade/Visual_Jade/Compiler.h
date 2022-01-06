@@ -46,6 +46,9 @@ Compiler* newCompiler(DEBUG_OPTIONS debugFlag);
 void runCompiler(Compiler* comp);
 void freeCompiler(Compiler* comp);
 
+void dumpRegisters(Compiler* comp);
+void dumpStack(Compiler* comp);
+
 // Lexical
 bool makeInstruction(Compiler* comp, int start, int end, char* raw);
 void codeToInstructionArray(Compiler* comp, char* rawCode);

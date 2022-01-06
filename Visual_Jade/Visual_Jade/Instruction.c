@@ -14,9 +14,13 @@ typedef enum {
 char* InstructionArray[NUM_OF_INSTRUCTION] = {
 	"push",
 	"pop",
-	"drop",
+	"prt",
 	"mov",
 	"stp",
+	"chr",
+	"jmp",
+	"stack",
+	"reg",
 };
 
 

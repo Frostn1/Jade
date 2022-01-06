@@ -24,13 +24,28 @@ void runCompiler(Compiler* comp) {
 			comp->Registers[comp->code[comp->ip + 1]] = comp->Stack[--comp->sp];
 			comp->ip += 2;
 			break;
-		case DROP:
-			printf("%d", comp->code[comp->ip + 1]);
+		case PRT:
+			printf("%d", comp->Registers[comp->code[comp->ip + 1]]);
+			comp->ip += 2;
+			break;
+		case CHR:
+			printf("%c", comp->Registers[comp->code[comp->ip + 1]]);
 			comp->ip += 2;
 			break;
 		case MOV:
 			comp->Registers[comp->code[comp->ip + 1]] = comp->code[comp->ip + 2];
 			comp->ip += 3;
+			break;
+		case JMP:
+			comp->ip = comp->code[comp->ip + 1] * 2 - 2;
+			break;
+		case STACK:
+			dumpStack(comp);
+			comp->ip++;
+			break;
+		case REG:
+			dumpRegisters(comp);
+			comp->ip++;
 			break;
 		case STP:
 			return;
@@ -40,6 +55,21 @@ void runCompiler(Compiler* comp) {
 
 void freeCompiler(Compiler* comp) {
 	free(comp);
+	return;
+}
+
+void dumpStack(Compiler* comp) {
+	for (size_t i = 0; i < comp->sp; i++) {
+		printf("0x%x ... %d\n", &comp->Stack[i], comp->Stack[i]);
+	}
+	return;
+}
+
+void dumpRegisters(Compiler* comp) {
+	printf("Reg Dump:\n");
+	for (size_t i = 0; i < sizeof(comp->Registers) / sizeof(int); i++) {
+		printf("%s <-> %d\n", RegisterArray[i], comp->Registers[i]);
+	}
 	return;
 }
 

@@ -3,7 +3,7 @@
 #include "Compiler.h"
 
 int main() {
-	Compiler* comp = newCompiler(DEBUG_ON);
+	Compiler* comp = newCompiler(DEBUG_OFF);
 	char* text = readFile("main.jd");
 	codeToInstructionArray(comp, text);
 	if (comp->error)

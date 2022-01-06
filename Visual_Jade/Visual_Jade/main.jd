@@ -1,10 +1,13 @@
-push 64
-push 90
-pop dx
-LOOP:
-	chr dx
-	dec dx
-	cmp dx
-	jne LOOP
+MAIN:
 
+
+call main
 stp
+
+
+
+MAIN:
+	push 67
+	pop fx
+	chr fx
+	ret

@@ -66,6 +66,16 @@ void runCompiler(Compiler* comp) {
 			comp->Registers[comp->code[comp->ip + 1]]--;
 			comp->ip += 2;
 			break;
+		case DROP:
+			comp->sp -= comp->code[++comp->ip];
+			comp->ip++;
+		case CALL:
+			comp->Stack[comp->sp++] = comp->code[++comp->ip];
+			comp->ip = comp->code[comp->ip];
+			break;
+		case RET:
+			comp->ip = comp->Stack[--comp->sp];
+			break;
 		case STP:
 			return;
 		}

@@ -51,9 +51,15 @@ Label* getLabel(LabelList* list, char* label) {
 }
 
 bool addLabel(LabelList* list, Label* label) {
-	if (hasLabel(list, label)) return false;
-	list->labels = (Label**)realloc(list->labels, sizeof(Label*) * (list->amount + 1));
-	list->labels[list->amount] = label;
-	list->amount++;
+	if (hasLabel(list, label)) {
+		getLabel(list, label->name)->ip = label->ip;
+	}
+	else {
+		// Drive over the old one
+		list->labels = (Label**)realloc(list->labels, sizeof(Label*) * (list->amount + 1));
+		list->labels[list->amount] = label;
+		list->amount++;
+	}
+	
 	return true;
 }

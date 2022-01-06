@@ -9,6 +9,7 @@
 
 #include "Register.h"
 #include "Instruction.h"
+#include "Label.h"
 #include "Tool.h"
 
 #define STACK_SIZE 256
@@ -40,6 +41,8 @@ typedef struct Compiler_16B {
 
 	// Conditional Flags
 	int zf;
+
+	LabelList* list;
 
 }Compiler;
 

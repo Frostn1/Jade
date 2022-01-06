@@ -14,6 +14,7 @@
 
 #define SPACE_ASCII ' '
 #define NEWLINE_ASCII '\n'
+#define TAB_ASCII '\t'
 
 char* readFile(char* filePath);
 char* lower(char* string);

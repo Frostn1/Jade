@@ -9,6 +9,7 @@ Compiler* newCompiler(DEBUG_OPTIONS debugFlag) {
 	for (size_t i = 0; i < NUM_OF_REGISTERS; i++) {
 		comp->Registers[i] = 0;
 	}
+	comp->list = newLabelList();
 	return comp;
 }
 
@@ -37,7 +38,7 @@ void runCompiler(Compiler* comp) {
 			comp->ip += 3;
 			break;
 		case JMP:
-			comp->ip = comp->code[comp->ip + 1] * 2 - 2;
+			comp->ip = comp->code[comp->ip + 1];
 			break;
 		case STACK:
 			dumpStack(comp);
@@ -61,6 +62,7 @@ void runCompiler(Compiler* comp) {
 }
 
 void freeCompiler(Compiler* comp) {
+	freeLabelList(comp->list);
 	free(comp);
 	return;
 }
@@ -86,19 +88,25 @@ void dumpRegisters(Compiler* comp) {
 // Might end with comp having the error flag up, need to check after leaving function
 bool makeInstruction(Compiler* comp, int start, int end, char* raw) {
 	char* word = NULL;
-	int ic = 0, rc = 0;
+	// ic - Instruction
+	// rc - Register
+	// lc - Label
+	int ic = 0, rc = 0, lc = 0;
 	word = (char*)malloc(end - start + 1);
 	strncpy(word, &raw[start], end - start);
 	word[end - start] = '\0';
 	if (comp->debug) printf("DEBUG: %s\n", word);
 	ic = isInstruction(lower(word));
 	rc = isRegister(lower(word));
-	if (ic - INSTRUCTION_EMPTY) comp->code[comp->ip++] = ic;
+	lc = isLabel(lower(word));
+	if (lc && addLabel(comp->list, newLabel(lower(word), comp->ip))) return true;
+	else if (hasLabel(comp->list, lower(word))) comp->code[comp->ip++] = getLabel(comp->list, lower(word))->ip;
+	else if (ic - INSTRUCTION_EMPTY) comp->code[comp->ip++] = ic;
 	else if(rc - REGISTER_EMPTY) comp->code[comp->ip++] = rc;
 	else if (isNumeric(word)) comp->code[comp->ip++] = atoi(word);
 	else {
 		comp->error = ERROR_LEXICAL;
-		return false;;
+		return false;
 	}
 	return true;
 }

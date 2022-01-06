@@ -35,5 +35,6 @@ int isNumeric(char* string) {
 
 int isSpace(char ch) {
     return ch == SPACE_ASCII ||
-        ch == NEWLINE_ASCII;
+        ch == NEWLINE_ASCII  ||
+        ch == TAB_ASCII;
 }

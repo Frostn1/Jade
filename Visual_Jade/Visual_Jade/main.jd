@@ -1,13 +1,4 @@
-push 65
-pop fx
-push 11
-
-pop ex
-push 10
-cmp ex
-jne JUMP
-
-JUMP:
-	prt fx
-	prt ex
-	stp
+WORD:
+	push 10
+jmp WORD
+stp

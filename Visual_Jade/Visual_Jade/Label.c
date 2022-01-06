@@ -51,7 +51,7 @@ Label* getLabel(LabelList* list, char* label) {
 }
 
 bool addLabel(LabelList* list, Label* label) {
-	if (hasLabel(list, label)) {
+	if (hasLabel(list, label->name)) {
 		getLabel(list, label->name)->ip = label->ip;
 	}
 	else {

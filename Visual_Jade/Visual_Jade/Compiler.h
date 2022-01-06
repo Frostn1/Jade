@@ -29,7 +29,8 @@ typedef enum {
 typedef struct Compiler_16B {
 	int Registers[NUM_OF_REGISTERS];
 	int Stack[STACK_SIZE];
-	int code[MAX_CODE_SIZE];
+	int* code[MAX_CODE_SIZE];
+	int amount;
 
 	// Special Registers
 	int sp;
@@ -53,6 +54,8 @@ void freeCompiler(Compiler* comp);
 
 void dumpRegisters(Compiler* comp);
 void dumpStack(Compiler* comp);
+
+void move(int* array[], int index, int num);
 
 // Lexical
 bool makeInstruction(Compiler* comp, int start, int end, char* raw);

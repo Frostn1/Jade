@@ -1,7 +1,7 @@
 SER:
 LOOP:
 
-push 5
+push 20
 call SER
 stp
 
@@ -12,8 +12,6 @@ SER:
 	LOOP:
 		prt ex
 		inc ex
-		push ex
-		cmp dx
-		pop ex
+		cmp dx ex
 		jne LOOP
 	ret

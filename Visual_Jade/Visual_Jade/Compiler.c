@@ -50,8 +50,8 @@ void runCompiler(Compiler* comp) {
 			comp->ip++;
 			break;
 		case CMP:
-			comp->zf = *comp->code[++comp->ip] - comp->Stack[comp->sp - 1];
-			comp->ip++;
+			comp->zf = *comp->code[comp->ip + 1] - *comp->code[comp->ip + 2];
+			comp->ip += 3;
 			break;
 		case JNE:
 			comp->ip = !comp->zf ? comp->ip + 2 : *comp->code[comp->ip + 1];

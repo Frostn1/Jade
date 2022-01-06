@@ -34,10 +34,12 @@ typedef struct Compiler_16B {
 	int sp;
 	int ip;
 
-	// Special flags
+	// Special Flags
 	int error;
 	int debug;
 
+	// Conditional Flags
+	int zf;
 
 }Compiler;
 

@@ -3,8 +3,8 @@
 Compiler* newCompiler(DEBUG_OPTIONS debugFlag) {
 	Compiler* comp = (Compiler*)malloc(sizeof(Compiler));
 	comp->debug = debugFlag;
-	comp->ip = 0;
-	comp->sp = 0;
+	comp->ip = 0, comp->sp = 0;
+	comp->zf = 0;
 	comp->error = ERROR_OFF;
 	for (size_t i = 0; i < NUM_OF_REGISTERS; i++) {
 		comp->Registers[i] = 0;
@@ -46,6 +46,13 @@ void runCompiler(Compiler* comp) {
 		case REG:
 			dumpRegisters(comp);
 			comp->ip++;
+			break;
+		case CMP:
+			comp->zf = comp->Registers[comp->code[++comp->ip]] - comp->Stack[comp->sp - 1];
+			comp->ip++;
+			break;
+		case JNE:
+			comp->ip = comp->zf ? comp->ip + 2 : comp->code[comp->ip + 1] * 2 - 2;
 			break;
 		case STP:
 			return;

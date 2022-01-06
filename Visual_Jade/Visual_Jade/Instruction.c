@@ -21,6 +21,8 @@ char* InstructionArray[NUM_OF_INSTRUCTION] = {
 	"jmp",
 	"stack",
 	"reg",
+	"cmp",
+	"jne",
 };
 
 

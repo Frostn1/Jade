@@ -1,6 +1,13 @@
-push 5
-push 6
-push 12
 push 65
-stack
-stp
+pop fx
+push 11
+
+pop ex
+push 10
+cmp ex
+jne JUMP
+
+JUMP:
+	prt fx
+	prt ex
+	stp

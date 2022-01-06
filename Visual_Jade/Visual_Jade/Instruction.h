@@ -17,6 +17,8 @@ typedef enum {
 	JMP,
 	STACK,
 	REG,
+	CMP,
+	JNE,
 	NUM_OF_INSTRUCTION,
 }Instruction;
 

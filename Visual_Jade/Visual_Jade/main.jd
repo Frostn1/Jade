@@ -1,13 +1,19 @@
-MAIN:
+SER:
+LOOP:
 
-
-call main
+push 5
+call SER
 stp
 
-
-
-MAIN:
-	push 67
-	pop fx
-	chr fx
+SER:
+	drop dx 2
+	push 0
+	pop ex
+	LOOP:
+		prt ex
+		inc ex
+		push ex
+		cmp dx
+		pop ex
+		jne LOOP
 	ret

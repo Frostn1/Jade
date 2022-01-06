@@ -23,15 +23,15 @@ void runCompiler(Compiler* comp) {
 			comp->ip++;
 			break;
 		case POP:
-			comp->Registers[*comp->code[comp->ip + 1]] = comp->Stack[--comp->sp];
+			*comp->code[comp->ip + 1] = comp->Stack[--comp->sp];
 			comp->ip += 2;
 			break;
 		case PRT:
-			printf("%d", comp->Registers[*comp->code[comp->ip + 1]]);
+			printf("%d", *comp->code[comp->ip + 1]);
 			comp->ip += 2;
 			break;
 		case CHR:
-			printf("%c", comp->Registers[*comp->code[comp->ip + 1]]);
+			printf("%c", *comp->code[comp->ip + 1]);
 			comp->ip += 2;
 			break;
 		case MOV:
@@ -50,7 +50,7 @@ void runCompiler(Compiler* comp) {
 			comp->ip++;
 			break;
 		case CMP:
-			comp->zf = comp->Registers[*comp->code[++comp->ip]] - comp->Stack[comp->sp - 1];
+			comp->zf = *comp->code[++comp->ip] - comp->Stack[comp->sp - 1];
 			comp->ip++;
 			break;
 		case JNE:
@@ -60,16 +60,17 @@ void runCompiler(Compiler* comp) {
 			comp->ip = !comp->zf ? comp->ip + 2 : *comp->code[comp->ip + 1];
 			break;
 		case INC:
-			comp->Registers[*comp->code[comp->ip + 1]]++;
+			(*comp->code[comp->ip + 1])++;
 			comp->ip += 2;
 			break;
 		case DEC:
-			comp->Registers[*comp->code[comp->ip + 1]]--;
+			(*comp->code[comp->ip + 1])--;
 			comp->ip += 2;
 			break;
 		case DROP:
-			comp->sp -= *comp->code[++comp->ip];
-			comp->ip++;
+			*comp->code[comp->ip + 1] = comp->Stack[comp->sp- *comp->code[comp->ip + 2]];
+			comp->ip += 3;
+			break;
 		case CALL:
 			comp->Stack[comp->sp++] = comp->ip + 2;
 			comp->ip = *comp->code[comp->ip + 1];
@@ -85,10 +86,10 @@ void runCompiler(Compiler* comp) {
 
 void freeCompiler(Compiler* comp) {
 	freeLabelList(comp->list);
-	for (size_t i = 0; i < comp->amount; i++) {
+	/*for (size_t i = 0; i < comp->amount; i++) {
 		if(*comp->code[i] > 0)
 			free(comp->code[i]);
-	}
+	}*/
 	free(comp);
 	return;
 }
@@ -133,7 +134,7 @@ bool makeInstruction(Compiler* comp, int start, int end, char* raw) {
 	if (lc && addLabel(comp->list, newLabel(lower(word), comp->ip))) return true;
 	else if (hasLabel(comp->list, lower(word))) comp->code[comp->ip] = &getLabel(comp->list, lower(word))->ip;
 	else if (ic - INSTRUCTION_EMPTY) move(comp->code, comp->ip, ic);
-	else if (rc - REGISTER_EMPTY) move(comp->code, comp->ip, rc);
+	else if (rc - REGISTER_EMPTY) comp->code[comp->ip] = &comp->Registers[rc];
 	else if (isNumeric(word)) move(comp->code, comp->ip, atoi(word));
 	else {
 		comp->error = ERROR_LEXICAL;

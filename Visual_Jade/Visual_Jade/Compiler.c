@@ -69,11 +69,11 @@ void runCompiler(Compiler* comp) {
 			comp->ip += 2;
 			break;
 		case DROP:
-			*comp->code[comp->ip + 1] = comp->Stack[comp->sp - *comp->code[comp->ip + 2]];
+			*comp->code[comp->ip + 1] = comp->Stack[comp->sp + *comp->code[comp->ip + 2] - 1];
 			comp->ip += 3;
 			break;
 		case LIFT:
-			comp->Stack[comp->sp + *comp->code[comp->ip + 2]] = *comp->code[comp->ip + 1];
+			comp->Stack[comp->sp + *comp->code[comp->ip + 2] - 1] = *comp->code[comp->ip + 1];
 			comp->ip += 3;
 			break;
 		case CALL:

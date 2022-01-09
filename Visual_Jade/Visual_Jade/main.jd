@@ -1,17 +1,10 @@
-SER:
-LOOP:
-
-push 20
-call SER
-stp
-
-SER:
-	drop dx 2
-	push 0
-	pop ex
-	LOOP:
-		prt ex
-		inc ex
-		cmp dx ex
-		jne LOOP
-	ret
+PRINT_NAME:
+	pop ecx
+	LOOP_PR:
+		cmp ecx 0
+		je END
+		drop edx ecx
+		chr edx
+		jmp LOOP_PR
+	END:
+		

@@ -1,0 +1,29 @@
+MAIN:
+	push 65
+	push 66
+	push 67
+	push 3
+	call PRINT_NAME
+	stp
+
+
+
+PRINT_NAME:
+	drop ebx 2
+    push ebx
+	mov ecx ebx
+	add ebx 3
+	LOOP_PR:
+		cmp ecx 0
+		je END
+		drop edx ebx
+		chr edx
+		dec ecx
+		dec ebx
+		jmp LOOP_PR
+
+	END:
+	pop ecx
+	ret
+		
+		

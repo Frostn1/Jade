@@ -6,11 +6,21 @@
 #define REGISTER_EMPTY -1
 
 typedef enum {
+	eax,
+	ebx,
+	ecx,
+	edx,
+	rbp,
+	rsp,
 	dx,
 	ex,
 	fx,
+
+	ip,
 	NUM_OF_REGISTERS
 }Register;
+
+
 
 extern char* RegisterArray[];
 

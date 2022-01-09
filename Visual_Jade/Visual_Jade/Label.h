@@ -6,6 +6,12 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdio.h>
+
+typedef enum {
+	LOOKAHEAD_OFF,
+	LOOKAHEAD_ON,
+}LOOKAHEAD_FLAG;
 
 typedef struct Label {
 	char* name;
@@ -24,7 +30,9 @@ LabelList* newLabelList();
 bool addLabel(LabelList* list, Label* label);
 
 Label* getLabel(LabelList* list, char* label);
-bool hasLabel(LabelList* list, char* label);
+bool hasLabel(LabelList* list, char* label, LOOKAHEAD_FLAG flag);
 bool isLabel(char* word);
 
+
+bool validateLabels(LabelList* list);
 #endif // !LABEL_H

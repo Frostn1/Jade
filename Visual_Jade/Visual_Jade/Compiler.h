@@ -20,6 +20,7 @@ typedef enum {
 	DEBUG_ON
 }DEBUG_OPTIONS;
 
+
 typedef enum {
 	ERROR_OFF,
 	ERROR_LEXICAL,
@@ -31,10 +32,6 @@ typedef struct Compiler_16B {
 	int Stack[STACK_SIZE];
 	int* code[MAX_CODE_SIZE];
 	int amount;
-
-	// Special Registers
-	int sp;
-	int ip;
 
 	// Special Flags
 	int error;

@@ -25,6 +25,13 @@ typedef enum {
 	CALL,
 	RET,
 	DROP,
+	LIFT,
+	JL,
+	JLE,
+	JG,
+	JGE,
+	SUB,
+	ADD,
 	NUM_OF_INSTRUCTION,
 }Instruction;
 

@@ -3,99 +3,110 @@
 Compiler* newCompiler(DEBUG_OPTIONS debugFlag) {
 	Compiler* comp = (Compiler*)malloc(sizeof(Compiler));
 	comp->debug = debugFlag;
-	comp->ip = 0, comp->sp = 0;
 	comp->zf = 0;
 	comp->error = ERROR_OFF;
 	comp->amount = 0;
 	for (size_t i = 0; i < NUM_OF_REGISTERS; i++) {
 		comp->Registers[i] = -1;
 	}
+	comp->Registers[ip] = 0, comp->Registers[rsp] = 0;
 	comp->list = newLabelList();
 	return comp;
 }
 
 void runCompiler(Compiler* comp) {
 	if (!validateLabels(comp->list)) return;
-	comp->ip = 0;
+	comp->Registers[ip] = 0;
 	while (true) {
-		switch (*comp->code[comp->ip]) {
+		switch (*comp->code[comp->Registers[ip]]) {
 		case PUSH:
-			comp->Stack[comp->sp++] = *comp->code[++comp->ip];
-			comp->ip++;
+			comp->Stack[comp->Registers[rsp]++] = *comp->code[++comp->Registers[ip]];
+			comp->Registers[ip]++;
 			break;
 		case POP:
-			*comp->code[comp->ip + 1] = comp->Stack[--comp->sp];
-			comp->ip += 2;
+			*comp->code[comp->Registers[ip] + 1] = comp->Stack[--comp->Registers[rsp]];
+			comp->Registers[ip] += 2;
 			break;
 		case PRT:
-			printf("%d", *comp->code[comp->ip + 1]);
-			comp->ip += 2;
+			printf("%d", *comp->code[comp->Registers[ip] + 1]);
+			comp->Registers[ip] += 2;
 			break;
 		case CHR:
-			printf("%c", *comp->code[comp->ip + 1]);
-			comp->ip += 2;
+			printf("%c", *comp->code[comp->Registers[ip] + 1]);
+			comp->Registers[ip] += 2;
 			break;
 		case MOV:
-			*comp->code[comp->ip + 1] = *comp->code[comp->ip + 2];
-			comp->ip += 3;
+			*comp->code[comp->Registers[ip] + 1] = *comp->code[comp->Registers[ip] + 2];
+			comp->Registers[ip] += 3;
 			break;
 		case JMP:
-			comp->ip = *comp->code[comp->ip + 1];
+			comp->Registers[ip] = *comp->code[comp->Registers[ip] + 1];
 			break;
 		case STACK:
 			dumpStack(comp);
-			comp->ip++;
+			comp->Registers[ip]++;
 			break;
 		case REG:
 			dumpRegisters(comp);
-			comp->ip++;
+			comp->Registers[ip]++;
 			break;
 		case CMP:
-			comp->zf = *comp->code[comp->ip + 1] - *comp->code[comp->ip + 2];
-			comp->ip += 3;
+			comp->zf = *comp->code[comp->Registers[ip] + 1] - *comp->code[comp->Registers[ip] + 2];
+			comp->Registers[ip] += 3;
 			break;
 		case JNE:
-			comp->ip = !comp->zf ? comp->ip + 2 : *comp->code[comp->ip + 1];
+			comp->Registers[ip] = !comp->zf ? comp->Registers[ip] + 2 : *comp->code[comp->Registers[ip] + 1];
 			break;
 		case JE:
-			comp->ip = comp->zf ? comp->ip + 2 : *comp->code[comp->ip + 1];
+			comp->Registers[ip] = comp->zf ? comp->Registers[ip] + 2 : *comp->code[comp->Registers[ip] + 1];
 			break;
 		case INC:
-			(*comp->code[comp->ip + 1])++;
-			comp->ip += 2;
+			(*comp->code[comp->Registers[ip] + 1])++;
+			comp->Registers[ip] += 2;
 			break;
 		case DEC:
-			(*comp->code[comp->ip + 1])--;
-			comp->ip += 2;
+			(*comp->code[comp->Registers[ip] + 1])--;
+			comp->Registers[ip] += 2;
 			break;
 		case DROP:
-			*comp->code[comp->ip + 1] = comp->Stack[comp->sp + *comp->code[comp->ip + 2] - 1];
-			comp->ip += 3;
+			*comp->code[comp->Registers[ip] + 1] = comp->Stack[comp->Registers[rsp] - *comp->code[comp->Registers[ip] + 2]];
+			comp->Registers[ip] += 3;
 			break;
 		case LIFT:
-			comp->Stack[comp->sp + *comp->code[comp->ip + 2] - 1] = *comp->code[comp->ip + 1];
-			comp->ip += 3;
+			comp->Stack[comp->Registers[rsp] - *comp->code[comp->Registers[ip] + 2]] = *comp->code[comp->Registers[ip] + 1];
+			comp->Registers[ip] += 3;
 			break;
 		case CALL:
-			comp->Stack[comp->sp++] = comp->ip + 2;
-			comp->ip = *comp->code[comp->ip + 1];
+			comp->Stack[comp->Registers[rsp]++] = comp->Registers[ip] + 2;
+			comp->Registers[ip] = *comp->code[comp->Registers[ip] + 1];
 			break;
 		case RET:
-			comp->ip = comp->Stack[--comp->sp];
+			comp->Registers[ip] = comp->Stack[--comp->Registers[rsp]];
 			break;
 		case JG:
-			comp->ip = comp->zf <= 0 ? comp->ip + 2 : *comp->code[comp->ip + 1];
+			comp->Registers[ip] = comp->zf <= 0 ? comp->Registers[ip] + 2 : *comp->code[comp->Registers[ip] + 1];
 			break;
 		case JL:
-			comp->ip = comp->zf >= 0 ? comp->ip + 2 : *comp->code[comp->ip + 1];
+			comp->Registers[ip] = comp->zf >= 0 ? comp->Registers[ip] + 2 : *comp->code[comp->Registers[ip] + 1];
 			break;
 		case JLE:
-			comp->ip = comp->zf > 0 ? comp->ip + 2 : *comp->code[comp->ip + 1];
+			comp->Registers[ip] = comp->zf > 0 ? comp->Registers[ip] + 2 : *comp->code[comp->Registers[ip] + 1];
 			break;
 		case JGE:
-			comp->ip = comp->zf < 0 ? comp->ip + 2 : *comp->code[comp->ip + 1];
+			comp->Registers[ip] = comp->zf < 0 ? comp->Registers[ip] + 2 : *comp->code[comp->Registers[ip] + 1];
+			break;
+		case ADD:
+			*comp->code[comp->Registers[ip] + 1] += *comp->code[comp->Registers[ip] + 1];
+			comp->Registers[ip] += 3;
+			break;
+		case SUB:
+			*comp->code[comp->Registers[ip] + 1] -= *comp->code[comp->Registers[ip] + 1];
+			comp->Registers[ip] += 3;
 			break;
 		case STP:
+			return;
+		default:
+			fprintf(stderr, "Unknown sub routine < %s > with code %d\n", InstructionArray[*comp->code[comp->Registers[ip]]], *comp->code[comp->Registers[ip]]);
 			return;
 		}
 	}
@@ -113,7 +124,7 @@ void freeCompiler(Compiler* comp) {
 
 void dumpStack(Compiler* comp) {
 	putchar('\n');
-	for (size_t i = 0; i < comp->sp; i++) {
+	for (size_t i = 0; i < comp->Registers[rsp]; i++) {
 		printf("0x%x ... %d\n", &comp->Stack[i], comp->Stack[i]);
 	}
 	return;
@@ -148,16 +159,16 @@ bool makeInstruction(Compiler* comp, int start, int end, char* raw) {
 	ic = isInstruction(lower(word));
 	rc = isRegister(lower(word));
 	lc = isLabel(lower(word));
-	if (lc && addLabel(comp->list, newLabel(lower(word), comp->ip))) return true;
-	else if (ic - INSTRUCTION_EMPTY) move(comp->code, comp->ip, ic);
-	else if (rc - REGISTER_EMPTY) comp->code[comp->ip] = &comp->Registers[rc];
-	else if (isNumeric(word)) move(comp->code, comp->ip, atoi(word));
-	else if (hasLabel(comp->list, lower(word), LOOKAHEAD_ON)) comp->code[comp->ip] = &getLabel(comp->list, lower(word))->ip;
+	if (lc && addLabel(comp->list, newLabel(lower(word), comp->Registers[ip]))) return true;
+	else if (ic - INSTRUCTION_EMPTY) move(comp->code, comp->Registers[ip], ic);
+	else if (rc - REGISTER_EMPTY) comp->code[comp->Registers[ip]] = &comp->Registers[rc];
+	else if (isNumeric(word)) move(comp->code, comp->Registers[ip], atoi(word));
+	else if (hasLabel(comp->list, lower(word), LOOKAHEAD_ON)) comp->code[comp->Registers[ip]] = &getLabel(comp->list, lower(word))->ip;
 	else {
 		comp->error = ERROR_LEXICAL;
 		return false;
 	}
-	comp->ip++;
+	comp->Registers[ip]++;
 	comp->amount++;
 	return true;
 }

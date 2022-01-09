@@ -30,6 +30,8 @@ typedef enum {
 	JLE,
 	JG,
 	JGE,
+	SUB,
+	ADD,
 	NUM_OF_INSTRUCTION,
 }Instruction;
 

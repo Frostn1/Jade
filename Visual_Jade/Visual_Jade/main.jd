@@ -1,17 +1,10 @@
-mov eax 5
-lift eax 4
-mov ebx 4
-START_LOOP0:
-	drop eax 4
-	cmp eax 4
-	jle END_LOOP0
-	mov eax 12
-	lift eax 8
-	dec ebx
-	lift ebx 4
-	jmp START_LOOP0
-
-END_LOOP0:
-
-	mov eax 0
-	stp
+PRINT_NAME:
+	pop ecx
+	LOOP_PR:
+		cmp ecx 0
+		je END
+		drop edx ecx
+		chr edx
+		jmp LOOP_PR
+	END:
+		

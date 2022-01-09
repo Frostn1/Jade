@@ -4,7 +4,7 @@
 
 int main() {
 	Compiler* comp = newCompiler(DEBUG_OFF);
-	char* text = readFile("main.jd");
+	char* text = readFile("D:/Programming/Projects/Jade/exmp/PrintString.jd");
 	codeToInstructionArray(comp, text);
 	if (comp->error)
 		fprintf(stderr, "ERROR: while matching terms\n");

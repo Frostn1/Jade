@@ -34,6 +34,8 @@ char* InstructionArray[NUM_OF_INSTRUCTION] = {
 	"jle",
 	"jg",
 	"jge",
+	"sub",
+	"add"
 };
 
 

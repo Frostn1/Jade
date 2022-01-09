@@ -15,6 +15,8 @@ typedef enum {
 	dx,
 	ex,
 	fx,
+
+	ip,
 	NUM_OF_REGISTERS
 }Register;
 

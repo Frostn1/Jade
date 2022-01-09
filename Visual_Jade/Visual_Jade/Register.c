@@ -10,6 +10,8 @@ char* RegisterArray[NUM_OF_REGISTERS] = {
 	"dx",
 	"ex",
 	"fx",
+
+	"ip",
 };
 
 

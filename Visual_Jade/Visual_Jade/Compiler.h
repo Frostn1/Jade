@@ -33,10 +33,6 @@ typedef struct Compiler_16B {
 	int* code[MAX_CODE_SIZE];
 	int amount;
 
-	// Special Registers
-	int sp;
-	int ip;
-
 	// Special Flags
 	int error;
 	int debug;

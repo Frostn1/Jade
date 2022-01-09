@@ -1,17 +1,17 @@
-SER:
-LOOP:
+mov eax 5
+lift eax 4
+mov ebx 4
+START_LOOP0:
+	drop eax 4
+	cmp eax 4
+	jle END_LOOP0
+	mov eax 12
+	lift eax 8
+	dec ebx
+	lift ebx 4
+	jmp START_LOOP0
 
-push 20
-call SER
-stp
+END_LOOP0:
 
-SER:
-	drop dx 2
-	push 0
-	pop ex
-	LOOP:
-		prt ex
-		inc ex
-		cmp dx ex
-		jne LOOP
-	ret
+	mov eax 0
+	stp

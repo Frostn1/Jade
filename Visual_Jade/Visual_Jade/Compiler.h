@@ -20,6 +20,7 @@ typedef enum {
 	DEBUG_ON
 }DEBUG_OPTIONS;
 
+
 typedef enum {
 	ERROR_OFF,
 	ERROR_LEXICAL,

@@ -8,7 +8,7 @@ Label* newLabel(char* name, int ip) {
 	Label* label = (Label*)malloc(sizeof(Label));
 	label->name = (char*)malloc(sizeof(char) * strlen(name));
 	strcpy(label->name, name);
-	label->name[strlen(name) - 1] = '\0';
+	label->name[name[strlen(name) - 1] == ':' ? strlen(name) - 1 : strlen(name)] = '\0';
 	label->ip = ip;
 	return label;
 }
@@ -34,12 +34,14 @@ void freeLabelList(LabelList* list) {
 	free(list);
 	return;
 }
-bool hasLabel(LabelList* list, char* label) {
+bool hasLabel(LabelList* list, char* label, LOOKAHEAD_FLAG flag) {
 	for (size_t i = 0; i < list->amount; i++) {
 		if (!strcmp(list->labels[i]->name, label))
 			return true;
 	}
-	return false;
+	if(flag)
+		addLabel(list, newLabel(label, -1));
+	return flag;
 }
 
 Label* getLabel(LabelList* list, char* label) {
@@ -51,7 +53,7 @@ Label* getLabel(LabelList* list, char* label) {
 }
 
 bool addLabel(LabelList* list, Label* label) {
-	if (hasLabel(list, label->name)) {
+	if (hasLabel(list, label->name, LOOKAHEAD_OFF)) {
 		getLabel(list, label->name)->ip = label->ip;
 	}
 	else {
@@ -62,4 +64,15 @@ bool addLabel(LabelList* list, Label* label) {
 	}
 	
 	return true;
+}
+
+bool validateLabels(LabelList* list) {
+	bool returnFlag = true;
+	for (size_t i = 0; i < list->amount; i++) {
+		if (list->labels[i]->ip == -1) {
+			fprintf(stderr, "Uninitialized local label used < %s >\n", list->labels[i]->name);
+			returnFlag = false;
+		}
+	}
+	return returnFlag;
 }

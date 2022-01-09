@@ -1,10 +1,17 @@
 #include "Register.h"
 
 char* RegisterArray[NUM_OF_REGISTERS] = {
+	"eax",
+	"ebx",
+	"ecx",
+	"edx",
+	"rbp",
+	"rsp",
 	"dx",
 	"ex",
 	"fx",
 };
+
 
 
 int isRegister(char* word) {

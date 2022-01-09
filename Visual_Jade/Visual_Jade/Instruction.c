@@ -28,7 +28,12 @@ char* InstructionArray[NUM_OF_INSTRUCTION] = {
 	"dec",
 	"call",
 	"ret",
-	"drop"
+	"drop",
+	"lift",
+	"jl",
+	"jle",
+	"jg",
+	"jge",
 };
 
 

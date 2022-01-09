@@ -15,6 +15,7 @@ Compiler* newCompiler(DEBUG_OPTIONS debugFlag) {
 }
 
 void runCompiler(Compiler* comp) {
+	if (!validateLabels(comp->list)) return;
 	comp->ip = 0;
 	while (true) {
 		switch (*comp->code[comp->ip]) {
@@ -35,7 +36,7 @@ void runCompiler(Compiler* comp) {
 			comp->ip += 2;
 			break;
 		case MOV:
-			comp->Registers[*comp->code[comp->ip + 1]] = *comp->code[comp->ip + 2];
+			*comp->code[comp->ip + 1] = *comp->code[comp->ip + 2];
 			comp->ip += 3;
 			break;
 		case JMP:
@@ -57,7 +58,7 @@ void runCompiler(Compiler* comp) {
 			comp->ip = !comp->zf ? comp->ip + 2 : *comp->code[comp->ip + 1];
 			break;
 		case JE:
-			comp->ip = !comp->zf ? comp->ip + 2 : *comp->code[comp->ip + 1];
+			comp->ip = comp->zf ? comp->ip + 2 : *comp->code[comp->ip + 1];
 			break;
 		case INC:
 			(*comp->code[comp->ip + 1])++;
@@ -68,7 +69,11 @@ void runCompiler(Compiler* comp) {
 			comp->ip += 2;
 			break;
 		case DROP:
-			*comp->code[comp->ip + 1] = comp->Stack[comp->sp- *comp->code[comp->ip + 2]];
+			*comp->code[comp->ip + 1] = comp->Stack[comp->sp - *comp->code[comp->ip + 2]];
+			comp->ip += 3;
+			break;
+		case LIFT:
+			comp->Stack[comp->sp + *comp->code[comp->ip + 2]] = *comp->code[comp->ip + 1];
 			comp->ip += 3;
 			break;
 		case CALL:
@@ -77,6 +82,18 @@ void runCompiler(Compiler* comp) {
 			break;
 		case RET:
 			comp->ip = comp->Stack[--comp->sp];
+			break;
+		case JG:
+			comp->ip = comp->zf <= 0 ? comp->ip + 2 : *comp->code[comp->ip + 1];
+			break;
+		case JL:
+			comp->ip = comp->zf >= 0 ? comp->ip + 2 : *comp->code[comp->ip + 1];
+			break;
+		case JLE:
+			comp->ip = comp->zf > 0 ? comp->ip + 2 : *comp->code[comp->ip + 1];
+			break;
+		case JGE:
+			comp->ip = comp->zf < 0 ? comp->ip + 2 : *comp->code[comp->ip + 1];
 			break;
 		case STP:
 			return;
@@ -132,10 +149,10 @@ bool makeInstruction(Compiler* comp, int start, int end, char* raw) {
 	rc = isRegister(lower(word));
 	lc = isLabel(lower(word));
 	if (lc && addLabel(comp->list, newLabel(lower(word), comp->ip))) return true;
-	else if (hasLabel(comp->list, lower(word))) comp->code[comp->ip] = &getLabel(comp->list, lower(word))->ip;
 	else if (ic - INSTRUCTION_EMPTY) move(comp->code, comp->ip, ic);
 	else if (rc - REGISTER_EMPTY) comp->code[comp->ip] = &comp->Registers[rc];
 	else if (isNumeric(word)) move(comp->code, comp->ip, atoi(word));
+	else if (hasLabel(comp->list, lower(word), LOOKAHEAD_ON)) comp->code[comp->ip] = &getLabel(comp->list, lower(word))->ip;
 	else {
 		comp->error = ERROR_LEXICAL;
 		return false;

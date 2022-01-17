@@ -1,4 +1,4 @@
-<img align="left" width="190" src="/images/Jade-Logo.jpg"/>
+<img align="left" width="190" src="/images/Jade-Logo-2.jpg"/>
 
 
 <h1>Jade</h1>

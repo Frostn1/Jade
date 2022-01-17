@@ -1,11 +1,23 @@
-# Jade
+<img align="left" width="190" src="/images/Jade-Logo.jpg"/>
+
+
+<h1>Jade</h1>
+
+### A basic assembly like instruction set built entirley in native C<br><br>![Language](https://img.shields.io/badge/language-C-6A7FC8.svg?style=for-the-badge)
+
+--- 
+
+* [The Language](#the-language)<br>
+* [Documentation](#docs)<br>
+---
+
+## <b>The Language</b>
+
 The Official Jade Instruction Set by Frostn.
-
-
 This is a basic assembly like instruction set built entirley in native C.  
 Runs off the shell without outputing an .exe file.
 
-## Docs
+## <b>Docs</b>
 
 While the content of a code file can be what ever your heart desires, every program got to end with the op `stp`,  
 as it tells the compiler to stop processing ops and that the code generation has ended.
@@ -46,30 +58,5 @@ push 5
 push 2
 drop ex 2
 ```
-
-
-## Examples
-### For loop
-Example for-loop code, that will print the numbers from 0 till 20 ( not inclusive ).
-```asm
-SER:
-LOOP:
-
-push 20
-call SER
-stp
-
-SER:
-	drop dx 2
-	push 0
-	pop ex
-	LOOP:
-		prt ex
-		inc ex
-		cmp dx ex
-		jne LOOP
-	ret
-```
-
 
 

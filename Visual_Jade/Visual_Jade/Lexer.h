@@ -48,5 +48,5 @@ void freeToken(Token* token);
 
 
 // General
-Token* scanNewToken(char* rawCode, int currentIndex);
+Token* scanNewToken(char* rawCode, int* currentIndex);
 #endif // !LEXER_H

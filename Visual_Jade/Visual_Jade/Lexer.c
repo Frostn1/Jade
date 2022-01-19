@@ -39,10 +39,14 @@ void freeTokenList(TokenList* list) {
 }
 
 
-Token* scanNewToken(char* rawCode, int currentIndex) {
+Token* scanNewToken(char* rawCode, int* currentIndex) {
 
-	while (isSpace(rawCode[currentIndex])) currentIndex++;
-
+	while (isSpace(rawCode[*currentIndex])) (*currentIndex)++;
+	int start = *currentIndex;
+	while(!isSpecial(rawCode[*currentIndex])) (*currentIndex)++;
+	char* lexeme = slice(rawCode, start, *currentIndex);
+	int keyword = isKeyword(SavedKeywords, NUM_OF_KEYWORDS, lexeme);
+	
 
 	return NULL;
 }
